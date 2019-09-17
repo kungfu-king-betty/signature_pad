@@ -289,6 +289,29 @@
       SignaturePad.prototype.toData = function () {
           return this._data;
       };
+      SignaturePad.prototype.resizeData = function (resize_ratioX, resize_ratioY) {
+        var _origData = this._data;
+        var _resizeData = [];
+        for(var i=0; i<_origData.length; i++){
+          var point_group = _origData[i];
+
+          if(point_group.length > 0){
+            for (var j=0; j<point_group.length; j++) {
+              var rawPoint = point_group[j];
+              var newPoint = {
+                x: Math.round(rawPoint.x * resize_ratioX),
+                y: Math.round(rawPoint.y * resize_ratioY),
+                time: rawPoint.time,
+                color: rawPoint.color
+              };
+              point_group[j] = newPoint;
+            }
+            _resizeData.push(point_group);
+          }
+        }
+        this._data = _resizeData;
+        return this._data;
+      }
       SignaturePad.prototype._strokeBegin = function (event) {
           var newPointGroup = {
               color: this.penColor,
